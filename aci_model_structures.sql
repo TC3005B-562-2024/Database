@@ -1,13 +1,14 @@
 DELIMITER $$
 
 CREATE TRIGGER update_connection_date_updated
-AFTER UPDATE ON connection
+BEFORE UPDATE ON connection
 FOR EACH ROW
 BEGIN
-    UPDATE connection SET connection.date_updated = NOW() WHERE connection.identifier = OLD.identifier;
+        SET NEW.date_updated = NOW();
 END $$
 
 DELIMITER ;
+
 
 CREATE VIEW all_connections AS
 SELECT *
@@ -16,10 +17,10 @@ FROM connection;
 DELIMITER $$
 
 CREATE TRIGGER update_alert_date_updated
-AFTER UPDATE ON alert
+BEFORE UPDATE ON alert
 FOR EACH ROW
 BEGIN
-    UPDATE alert SET alert.date_updated = NOW() WHERE alert.identifier = OLD.identifier;
+    SET NEW.date_updated = NOW();
 END $$
 
 DELIMITER ;
@@ -32,10 +33,10 @@ FROM alert;
 DELIMITER $$
 
 CREATE TRIGGER update_training_date_updated
-AFTER UPDATE ON training
+BEFORE UPDATE ON training
 FOR EACH ROW
 BEGIN
-    UPDATE training SET training.date_updated = NOW() WHERE training.identifier = OLD.identifier;
+    SET NEW.date_updated = NOW();
 END $$
 
 DELIMITER ;
@@ -49,10 +50,10 @@ DELIMITER ;
 DELIMITER $$
 
 CREATE TRIGGER update_insight_date_updated
-AFTER UPDATE ON insight
+BEFORE UPDATE ON insight
 FOR EACH ROW
 BEGIN
-    UPDATE insight SET insight.date_updated = NOW() WHERE insight.identifier = OLD.identifier;
+    SET NEW.date_updated = NOW();
 END $$
 
 DELIMITER ;
@@ -64,10 +65,10 @@ FROM insight;
 DELIMITER $$
 
 CREATE TRIGGER update_category_date_updated
-AFTER UPDATE ON category
+BEFORE UPDATE ON category
 FOR EACH ROW
 BEGIN
-    UPDATE category SET category.date_updated = NOW() WHERE category.identifier = OLD.identifier;
+    SET NEW.date_updated = NOW();
 END $$
 
 DELIMITER ;

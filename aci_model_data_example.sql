@@ -10,5 +10,3 @@ CALL insert_training("Harmony environment", NULL);
 CALL insert_category("Harmony", NULL, 4);
 CALL insert_insight(2, "Nice relationships", NULL);
 CALL insert_alert(2, 2, 1, "ABC");
-
-SELECT * FROM alert;
