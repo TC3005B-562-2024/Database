@@ -76,14 +76,14 @@ CREATE VIEW all_categories AS
 SELECT *
 FROM category;
 
-CREATE VIEW get_all_insights_with_category AS
+CREATE VIEW all_insights_with_category AS
 SELECT category.identifier, category.denomination, insight.identifier as "insight.identifier", insight.denomination AS "insight.denomination" FROM insight
-INNER JOIN category ON insight.category_identifier = category.identifier;
+LEFT JOIN category ON insight.category_identifier = category.identifier;
 
 
-CREATE VIEW get_all_alerts_with_training AS
+CREATE VIEW all_alerts_with_training AS
 SELECT training.identifier, training.denomination, alert.identifier as "alert.identifier", alert.is_solved AS "alert.is_solved", alert.date_registered AS "alert.date_registered"
-FROM training INNER JOIN alert ON alert.training_identifier = training.identifier;
+FROM training LEFT JOIN alert ON alert.training_identifier = training.identifier;
 
 
 DELIMITER //
@@ -190,7 +190,7 @@ DELIMITER //
 CREATE PROCEDURE get_insight_with_category_by_identifier(IN id SMALLINT)
 BEGIN
     SELECT category.identifier, category.denomination, insight.identifier as "insight.identifier", insight.denomination AS "insight.denomination" FROM insight
-INNER JOIN category ON insight.category_identifier = category.identifier WHERE category.identifier = id;
+LEFT JOIN category ON insight.category_identifier = category.identifier WHERE category.identifier = id;
 END //
 
 DELIMITER ;
@@ -201,7 +201,7 @@ DELIMITER //
 CREATE PROCEDURE get_alert_with_training_by_identifier(IN id BIGINT)
 BEGIN
 SELECT training.identifier, training.denomination, alert.identifier as "alert.identifier", alert.is_solved AS "alert.is_solved", alert.date_registered AS "alert.date_registered"
-FROM training INNER JOIN alert ON alert.training_identifier = training.identifier WHERE alert.identifier = id;
+FROM training LEFT JOIN alert ON alert.training_identifier = training.identifier WHERE alert.identifier = id;
 END //
 
 DELIMITER ;
