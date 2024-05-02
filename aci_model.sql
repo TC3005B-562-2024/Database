@@ -57,8 +57,8 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aci`.`training` (
   `identifier` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `denomination` VARCHAR(100) NOT NULL,
-  `description` TINYTEXT NULL,
+  `denomination` VARCHAR(100) NOT NULL, -- TEXT
+  `description` TINYTEXT NULL, -- TEXT
   `date_registered` DATETIME NOT NULL DEFAULT NOW(),
   `date_updated` DATETIME NOT NULL DEFAULT NOW(),
   `is_active` TINYINT UNSIGNED NOT NULL DEFAULT 1,
@@ -106,8 +106,8 @@ CREATE TABLE IF NOT EXISTS `aci`.`alert` (
   `resource` VARCHAR(200) NOT NULL,
   `date_registered` DATETIME NOT NULL DEFAULT NOW(),
   `date_updated` DATETIME NOT NULL DEFAULT NOW(),
-  `is_solved` TINYINT UNSIGNED NOT NULL DEFAULT 1,
-  `date_training_completed` DATETIME NULL,
+  `is_solved` TINYINT UNSIGNED NOT NULL DEFAULT 1, -- Change from 1 to 1
+  `date_training_completed` DATETIME NULL, -- Trigger linking is_training_completed
   `has_training` TINYINT UNSIGNED GENERATED ALWAYS AS (if(`training_identifier` is not null, 1, 0)),
   `is_training_completed` TINYINT UNSIGNED GENERATED ALWAYS AS (if(`date_training_completed` is not null, 1, 0)),
   PRIMARY KEY (`identifier`),
