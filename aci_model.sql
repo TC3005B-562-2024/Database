@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `aci`.`alert` (
   `resource` VARCHAR(200) NOT NULL,
   `date_registered` DATETIME NOT NULL DEFAULT NOW(),
   `date_updated` DATETIME NOT NULL DEFAULT NOW(),
-  `is_solved` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+  `is_solved` TINYINT UNSIGNED NULL,
   `date_training_completed` DATETIME NULL,
   `has_training` TINYINT UNSIGNED GENERATED ALWAYS AS (if(`training_identifier` is not null, 1, 0)),
   `is_training_completed` TINYINT UNSIGNED GENERATED ALWAYS AS (if(`date_training_completed` is not null, 1, 0)),

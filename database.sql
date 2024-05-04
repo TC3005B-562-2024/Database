@@ -32,7 +32,7 @@ CREATE TABLE `alert` (
   `resource` varchar(200) NOT NULL,
   `date_registered` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `is_solved` tinyint unsigned NOT NULL DEFAULT '0',
+  `is_solved` tinyint unsigned NULL,
   `date_training_completed` datetime DEFAULT NULL,
   `has_training` tinyint unsigned GENERATED ALWAYS AS (if((`training_identifier` is not null),1,0)) VIRTUAL,
   `is_training_completed` tinyint unsigned GENERATED ALWAYS AS (if((`date_training_completed` is not null),1,0)) VIRTUAL,
