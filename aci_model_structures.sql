@@ -1,3 +1,5 @@
+USE `aci` ;
+
 DELIMITER $$
 
 CREATE TRIGGER update_connection_date_updated
@@ -138,7 +140,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE get_connection_by_identifier(IN id INT)
+CREATE PROCEDURE get_connection_by_identifier(IN id INT UNSIGNED)
 BEGIN
     SELECT denomination, description, date_joined FROM connection WHERE identifier = id;
 END //
@@ -148,7 +150,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE get_alert_by_identifier(IN id BIGINT)
+CREATE PROCEDURE get_alert_by_identifier(IN id BIGINT UNSIGNED)
 BEGIN
     SELECT connection_identifier, insight_identifier, training_identifier, date_registered, is_solved, date_training_completed FROM alert WHERE identifier = id;
 END //
@@ -158,7 +160,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE get_training_by_identifier(IN id SMALLINT)
+CREATE PROCEDURE get_training_by_identifier(IN id SMALLINT UNSIGNED)
 BEGIN
     SELECT denomination, description, date_joined FROM training WHERE identifier = id;
 END //
@@ -168,7 +170,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE get_insight_by_identifier(IN id SMALLINT)
+CREATE PROCEDURE get_insight_by_identifier(IN id SMALLINT UNSIGNED)
 BEGIN
     SELECT denomination, description, date_registered FROM insight WHERE identifier = id;
 END //
@@ -178,7 +180,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE get_category_by_identifier(IN id TINYINT)
+CREATE PROCEDURE get_category_by_identifier(IN id TINYINT UNSIGNED)
 BEGIN
     SELECT denomination, description, priority, date_registered FROM insight WHERE identifier = id;
 END //
@@ -188,7 +190,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE get_insight_with_category_by_identifier(IN id SMALLINT)
+CREATE PROCEDURE get_insight_with_category_by_identifier(IN id TINYINT UNSIGNED)
 BEGIN
     SELECT category.identifier, category.denomination, insight.identifier as "insight.identifier", insight.denomination AS "insight.denomination" FROM insight
 LEFT JOIN category ON insight.category_identifier = category.identifier WHERE category.identifier = id;
@@ -199,7 +201,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE get_alert_with_training_by_identifier(IN id BIGINT)
+CREATE PROCEDURE get_alert_with_training_by_identifier(IN id BIGINT UNSIGNED)
 BEGIN
 SELECT training.identifier, training.denomination, alert.identifier as "alert.identifier", alert.is_solved AS "alert.is_solved", alert.date_registered AS "alert.date_registered"
 FROM training LEFT JOIN alert ON alert.training_identifier = training.identifier WHERE alert.identifier = id;
@@ -218,7 +220,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE insert_training(IN denomination_value VARCHAR(100), IN description_value TINYTEXT)
+CREATE PROCEDURE insert_training(IN denomination_value VARCHAR(100), IN description_value TEXT)
 BEGIN
 INSERT INTO training(denomination, description) VALUE (denomination_value, description_value);
 END //
@@ -236,7 +238,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE insert_insight(IN category_identifier_value TINYINT UNSIGNED, IN denomination_value VARCHAR(100), IN description_value TINYTEXT)
+CREATE PROCEDURE insert_insight(IN category_identifier_value TINYINT UNSIGNED, IN denomination_value VARCHAR(100), IN description_value TEXT)
 BEGIN
 INSERT INTO insight(category_identifier, denomination, description) VALUE (category_identifier_value, denomination_value, description_value);
 END //
@@ -245,9 +247,18 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE insert_alert(IN connection_identifier_value INT UNSIGNED, insight_identifier_value SMALLINT UNSIGNED, IN training_identifier_value SMALLINT UNSIGNED, IN resource_value VARCHAR(200))
+CREATE PROCEDURE insert_alert(IN connection_identifier_value INT UNSIGNED, IN insight_identifier_value SMALLINT UNSIGNED, IN training_identifier_value SMALLINT UNSIGNED, IN resource_value VARCHAR(200))
 BEGIN
 INSERT INTO alert(connection_identifier, insight_identifier, training_identifier, resource) VALUE (connection_identifier_value, insight_identifier_value, training_identifier_value, resource_value);
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE complete_alert_training(IN alert_identifier_value BIGINT UNSIGNED)
+BEGIN
+UPDATE alert SET date_training_completed = NOW() WHERE identifier = alert_identifier_value;
 END //
 
 DELIMITER ;
