@@ -56,6 +56,7 @@ CREATE TABLE `alert` (
 
 LOCK TABLES `alert` WRITE;
 /*!40000 ALTER TABLE `alert` DISABLE KEYS */;
+INSERT INTO `alert` (`identifier`, `connection_identifier`, `insight_identifier`, `training_identifier`, `resource`, `date_registered`, `date_updated`, `is_solved`, `date_training_completed`) VALUES (41,1,16,1,'resource','2024-05-21 00:40:34','2024-05-21 00:40:34',0,NULL),(44,1,16,1,'resource','2024-05-21 00:44:32','2024-05-21 00:44:32',0,NULL),(48,1,16,1,'resource','2024-05-21 00:46:46','2024-05-21 00:46:46',0,NULL),(52,1,16,1,'resource','2024-05-21 00:48:28','2024-05-21 00:48:28',0,NULL),(56,1,16,1,'resource','2024-05-21 00:50:16','2024-05-21 00:50:16',0,NULL),(60,1,16,1,'resource','2024-05-21 00:54:19','2024-05-21 00:54:19',0,NULL),(66,1,16,1,'resource','2024-05-21 00:55:25','2024-05-21 00:55:25',0,NULL),(72,1,16,1,'resource','2024-05-21 00:57:30','2024-05-21 00:57:30',0,NULL),(75,1,16,1,'resource','2024-05-21 00:57:37','2024-05-21 00:57:37',0,NULL),(78,1,16,1,'resource','2024-05-21 00:58:14','2024-05-21 00:58:14',0,NULL),(80,1,16,1,'resource','2024-05-21 00:58:17','2024-05-21 00:58:17',0,NULL),(85,1,16,1,'resource','2024-05-21 01:01:27','2024-05-21 01:01:27',0,NULL),(87,1,16,1,'resource','2024-05-21 01:01:30','2024-05-21 01:01:30',0,NULL),(89,1,16,1,'resource','2024-05-21 01:01:34','2024-05-21 01:01:34',0,NULL),(91,1,16,1,'resource','2024-05-21 01:11:32','2024-05-21 01:11:32',0,NULL),(92,1,16,1,'resource','2024-05-21 01:11:34','2024-05-21 01:11:34',0,NULL),(98,1,16,1,'resource','2024-05-21 15:54:30','2024-05-21 15:54:30',0,NULL),(104,1,16,1,'resource','2024-05-21 16:13:21','2024-05-21 16:13:21',0,NULL),(110,1,16,1,'resource','2024-05-21 16:24:31','2024-05-21 16:24:31',0,NULL),(116,1,16,1,'resource','2024-05-21 16:57:43','2024-05-21 16:57:43',0,NULL),(122,1,16,1,'resource','2024-05-21 17:01:46','2024-05-21 17:01:46',0,NULL),(128,1,16,1,'resource','2024-05-21 19:12:48','2024-05-21 19:12:48',0,NULL),(133,1,10,NULL,'arn:aws:connect:us-east-1:674530197385:instance/7c78bd60-4a9f-40e5-b461-b7a0dfaad848/queue/bd22c18b-715f-4fb6-9ae4-8bf896fd87f6','2024-05-21 20:47:17','2024-05-21 20:47:17',NULL,NULL),(134,1,10,1,'arn:aws:connect:us-east-1:674530197385:instance/7c78bd60-4a9f-40e5-b461-b7a0dfaad848/queue/bd22c18b-715f-4fb6-9ae4-8bf896fd87f6','2024-05-22 02:08:53','2024-05-22 02:08:53',1,NULL),(135,1,11,1,'arn:aws:connect:us-east-1:674530197385:instance/7c78bd60-4a9f-40e5-b461-b7a0dfaad848/queue/bd22c18b-715f-4fb6-9ae4-8bf896fd87f6','2024-05-22 02:17:43','2024-05-22 08:32:10',1,'2024-05-22 02:32:11'),(136,1,10,1,'arn:aws:connect:us-east-1:674530197385:instance/7c78bd60-4a9f-40e5-b461-b7a0dfaad848/agent/6887b106-f684-485e-9c47-a6b1e16cdd21','2024-05-22 13:08:26','2024-05-22 19:09:41',1,'2024-05-22 13:09:41'),(137,1,10,1,'arn:aws:connect:us-east-1:674530197385:instance/7c78bd60-4a9f-40e5-b461-b7a0dfaad848/agent/7d76a01c-674f-431b-94ed-2d9a936ff3e3','2024-05-22 13:11:58','2024-05-22 13:11:58',1,NULL),(138,1,10,1,'arn:aws:connect:us-east-1:674530197385:instance/7c78bd60-4a9f-40e5-b461-b7a0dfaad848/agent/6887b106-f684-485e-9c47-a6b1e16cdd21','2024-05-22 13:14:35','2024-05-22 13:14:35',1,NULL),(140,1,16,1,'resource','2024-05-22 16:40:37','2024-05-22 16:40:37',0,NULL),(146,1,16,1,'resource','2024-05-22 16:43:56','2024-05-22 16:43:56',0,NULL);
 /*!40000 ALTER TABLE `alert` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -142,6 +143,7 @@ SET @saved_cs_client     = @@character_set_client;
 /*!50503 SET character_set_client = utf8mb4 */;
 /*!50001 CREATE VIEW `all_connections` AS SELECT 
  1 AS `identifier`,
+ 1 AS `uid`,
  1 AS `denomination`,
  1 AS `description`,
  1 AS `date_joined`,
@@ -280,6 +282,7 @@ CREATE TABLE `connection` (
 
 LOCK TABLES `connection` WRITE;
 /*!40000 ALTER TABLE `connection` DISABLE KEYS */;
+INSERT INTO `connection` VALUES (1,'0DW8s4ZUHveDwLkK3u0qSiKIMZ53','Boeing Inc.','Aeronautics enterprise.','2024-05-06 17:16:10','2024-05-07 00:19:20',1);
 /*!40000 ALTER TABLE `connection` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -705,9 +708,9 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`34.27.208.49` PROCEDURE `insert_connection`(IN denomination_value VARCHAR(100), IN description_value TINYTEXT)
+CREATE DEFINER=`root`@`34.27.208.49` PROCEDURE `insert_connection`(IN uid_value VARCHAR(200), IN denomination_value VARCHAR(100), IN description_value TINYTEXT)
 BEGIN
-INSERT INTO connection(denomination, description) VALUE (denomination_value, description_value);
+INSERT INTO connection(uid, denomination, description) VALUE (uid_value, denomination_value, description_value);
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -820,7 +823,7 @@ DELIMITER ;
 /*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`34.27.208.49` SQL SECURITY DEFINER */
-/*!50001 VIEW `all_connections` AS select `connection`.`identifier` AS `identifier`,`connection`.`denomination` AS `denomination`,`connection`.`description` AS `description`,`connection`.`date_joined` AS `date_joined`,`connection`.`date_updated` AS `date_updated`,`connection`.`is_active` AS `is_active` from `connection` */;
+/*!50001 VIEW `all_connections` AS select `connection`.`identifier` AS `identifier`,`connection`.`uid` AS `uid`,`connection`.`denomination` AS `denomination`,`connection`.`description` AS `description`,`connection`.`date_joined` AS `date_joined`,`connection`.`date_updated` AS `date_updated`,`connection`.`is_active` AS `is_active` from `connection` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;

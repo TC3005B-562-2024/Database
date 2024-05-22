@@ -211,9 +211,9 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE insert_connection(IN denomination_value VARCHAR(100), IN description_value TINYTEXT)
+CREATE PROCEDURE insert_connection(IN uid_value VARCHAR(200), IN denomination_value VARCHAR(100), IN description_value TINYTEXT)
 BEGIN
-INSERT INTO connection(denomination, description) VALUE (denomination_value, description_value);
+INSERT INTO connection(uid, denomination, description) VALUE (uid_value, denomination_value, description_value);
 END //
 
 DELIMITER ;

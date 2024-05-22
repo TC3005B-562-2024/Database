@@ -1,4 +1,4 @@
-INSERT INTO connection(denomination) VALUE ("Amazon AWS");
+INSERT INTO connection(uid, denomination) VALUE ("xd", "Amazon AWS");
 INSERT INTO training(denomination) VALUE ("Health environment");
 INSERT INTO training(denomination) VALUE ("Nice environment");
 INSERT INTO category(denomination, priority) VALUE ("Working", 4);
