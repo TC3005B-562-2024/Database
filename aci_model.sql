@@ -19,6 +19,7 @@ USE `aci` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `aci`.`connection` (
   `identifier` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `uid` VARCHAR(200) NOT NULL,
   `denomination` VARCHAR(100) NOT NULL,
   `description` TINYTEXT NULL,
   `date_joined` DATETIME NOT NULL DEFAULT NOW(),
@@ -26,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `aci`.`connection` (
   `is_active` TINYINT UNSIGNED NOT NULL DEFAULT 1,
   PRIMARY KEY (`identifier`),
   UNIQUE INDEX `identifier_UNIQUE` (`identifier` ASC) VISIBLE,
+  UNIQUE INDEX `uid_UNIQUE` (`uid` ASC) VISIBLE,
   UNIQUE INDEX `denomination_UNIQUE` (`denomination` ASC) INVISIBLE,
   INDEX `date_updated_INDEX` (`date_updated` ASC) INVISIBLE,
   INDEX `is_active_INDEX` (`is_active` ASC) VISIBLE)

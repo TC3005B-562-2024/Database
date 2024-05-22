@@ -259,6 +259,7 @@ DROP TABLE IF EXISTS `connection`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `connection` (
   `identifier` int unsigned NOT NULL AUTO_INCREMENT,
+  `uid` varchar(200) NOT NULL,
   `denomination` varchar(100) NOT NULL,
   `description` tinytext,
   `date_joined` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -266,6 +267,7 @@ CREATE TABLE `connection` (
   `is_active` tinyint unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`identifier`),
   UNIQUE KEY `identifier_UNIQUE` (`identifier`),
+  UNIQUE KEY `uid_UNIQUE` (`uid`),
   UNIQUE KEY `denomination_UNIQUE` (`denomination`) /*!80000 INVISIBLE */,
   KEY `date_updated_INDEX` (`date_updated`) /*!80000 INVISIBLE */,
   KEY `is_active_INDEX` (`is_active`)
