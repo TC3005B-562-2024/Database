@@ -85,7 +85,7 @@ LEFT JOIN category ON insight.category_identifier = category.identifier;
 
 
 CREATE VIEW all_alerts_with_training AS
-SELECT training.identifier, training.denomination, alert.identifier as "alert.identifier", alert.is_solved AS "alert.is_solved", alert.date_registered AS "alert.date_registered"
+SELECT training.identifier, training.denomination, alert.identifier as "alert.identifier", alert.intervene_contact, alert.intervene_agent, alert.original_routing_profile, alert.destination_routing_profile, alert.transfered_agent, alert.is_solved AS "alert.is_solved", alert.date_registered AS "alert.date_registered"
 FROM training LEFT JOIN alert ON alert.training_identifier = training.identifier;
 
 
@@ -142,7 +142,7 @@ DELIMITER //
 
 CREATE PROCEDURE get_connection_by_identifier(IN id INT UNSIGNED)
 BEGIN
-    SELECT denomination, description, date_joined FROM connection WHERE identifier = id;
+    SELECT uid, supervisor, denomination, description, date_joined FROM connection WHERE identifier = id;
 END //
 
 DELIMITER ;
@@ -152,7 +152,7 @@ DELIMITER //
 
 CREATE PROCEDURE get_alert_by_identifier(IN id BIGINT UNSIGNED)
 BEGIN
-    SELECT connection_identifier, insight_identifier, training_identifier, date_registered, is_solved, date_training_completed FROM alert WHERE identifier = id;
+    SELECT connection_identifier, insight_identifier, training_identifier, intervene_contact, intervene_agent, original_routing_profile, destination_routing_profile, transfered_agent, date_registered, is_solved, date_training_completed FROM alert WHERE identifier = id;
 END //
 
 DELIMITER ;
@@ -203,7 +203,7 @@ DELIMITER //
 
 CREATE PROCEDURE get_alert_with_training_by_identifier(IN id BIGINT UNSIGNED)
 BEGIN
-SELECT training.identifier, training.denomination, alert.identifier as "alert.identifier", alert.is_solved AS "alert.is_solved", alert.date_registered AS "alert.date_registered"
+SELECT training.identifier, training.denomination, alert.identifier as "alert.identifier", alert.intervene_contact, alert.intervene_agent, alert.original_routing_profile, alert.destination_routing_profile, alert.transfered_agent, alert.is_solved AS "alert.is_solved", alert.date_registered AS "alert.date_registered"
 FROM training LEFT JOIN alert ON alert.training_identifier = training.identifier WHERE alert.identifier = id;
 END //
 
@@ -211,9 +211,9 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE insert_connection(IN uid_value VARCHAR(200), IN denomination_value VARCHAR(100), IN description_value TINYTEXT)
+CREATE PROCEDURE insert_connection(IN uid_value VARCHAR(200), IN supervisor_value VARCHAR(200), IN denomination_value VARCHAR(100), IN description_value TINYTEXT)
 BEGIN
-INSERT INTO connection(uid, denomination, description) VALUE (uid_value, denomination_value, description_value);
+INSERT INTO connection(uid, supervisor, denomination, description) VALUE (uid_value, supervisor_value, denomination_value, description_value);
 END //
 
 DELIMITER ;
@@ -247,9 +247,9 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE insert_alert(IN connection_identifier_value INT UNSIGNED, IN insight_identifier_value SMALLINT UNSIGNED, IN training_identifier_value SMALLINT UNSIGNED, IN resource_value VARCHAR(200))
+CREATE PROCEDURE insert_alert(IN connection_identifier_value INT UNSIGNED, IN insight_identifier_value SMALLINT UNSIGNED, IN training_identifier_value SMALLINT UNSIGNED, IN intervene_contact_value VARCHAR(200), IN intervene_agent_value VARCHAR(200), IN original_routing_profile_value VARCHAR(200), IN destination_routing_profile_value VARCHAR(200), IN transfered_agent VARCHAR(200), IN resource_value VARCHAR(200))
 BEGIN
-INSERT INTO alert(connection_identifier, insight_identifier, training_identifier, resource) VALUE (connection_identifier_value, insight_identifier_value, training_identifier_value, resource_value);
+INSERT INTO alert(connection_identifier, insight_identifier, training_identifier, intervene_contact, intervene_agent, original_routing_profile, destination_routing_profile, transfered_agent, resource) VALUE (connection_identifier_value, insight_identifier_value, training_identifier_value, intervene_contact_value, intervene_agent_value, original_routing_profile_value, destination_routing_profile_value, transfered_agent_value, resource_value);
 END //
 
 DELIMITER ;

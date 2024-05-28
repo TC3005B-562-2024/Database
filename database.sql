@@ -29,6 +29,11 @@ CREATE TABLE `alert` (
   `connection_identifier` int unsigned NOT NULL,
   `insight_identifier` smallint unsigned NOT NULL,
   `training_identifier` smallint unsigned DEFAULT NULL,
+  `intervene_contact` varchar(200) NULL,
+  `intervene_agent` varchar(200) NULL,
+  `original_routing_profile` varchar(200) NULL,
+  `destination_routing_profile` varchar(200) NULL,
+  `transfered_agent` varchar(200) NULL,
   `resource` varchar(200) NOT NULL,
   `date_registered` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -90,6 +95,11 @@ SET @saved_cs_client     = @@character_set_client;
  1 AS `connection_identifier`,
  1 AS `insight_identifier`,
  1 AS `training_identifier`,
+ 1 AS `intervene_contact`, 
+ 1 AS `intervene_agent`, 
+ 1 AS `original_routing_profile`, 
+ 1 AS `destination_routing_profile`, 
+ 1 AS `transfered_agent`,
  1 AS `resource`,
  1 AS `date_registered`,
  1 AS `date_updated`,
@@ -111,6 +121,11 @@ SET @saved_cs_client     = @@character_set_client;
  1 AS `identifier`,
  1 AS `denomination`,
  1 AS `alert.identifier`,
+ 1 AS `alert.intervene_contact`, 
+ 1 AS `alert.intervene_agent`, 
+ 1 AS `alert.original_routing_profile`, 
+ 1 AS `alert.destination_routing_profile`, 
+ 1 AS `alert.transfered_agent`,
  1 AS `alert.is_solved`,
  1 AS `alert.date_registered`*/;
 SET character_set_client = @saved_cs_client;
@@ -144,6 +159,7 @@ SET @saved_cs_client     = @@character_set_client;
 /*!50001 CREATE VIEW `all_connections` AS SELECT 
  1 AS `identifier`,
  1 AS `uid`,
+ 1 AS `supervisor`,
  1 AS `denomination`,
  1 AS `description`,
  1 AS `date_joined`,
@@ -262,6 +278,7 @@ DROP TABLE IF EXISTS `connection`;
 CREATE TABLE `connection` (
   `identifier` int unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(200) NOT NULL,
+  `supervisor` varchar(200) NOT NULL,
   `denomination` varchar(100) NOT NULL,
   `description` tinytext,
   `date_joined` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -271,6 +288,7 @@ CREATE TABLE `connection` (
   UNIQUE KEY `identifier_UNIQUE` (`identifier`),
   UNIQUE KEY `uid_UNIQUE` (`uid`),
   UNIQUE KEY `denomination_UNIQUE` (`denomination`) /*!80000 INVISIBLE */,
+  KEY `supervisor_INDEX` (`supervisor`) /*!80000 INVISIBLE */,
   KEY `date_updated_INDEX` (`date_updated`) /*!80000 INVISIBLE */,
   KEY `is_active_INDEX` (`is_active`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -282,7 +300,7 @@ CREATE TABLE `connection` (
 
 LOCK TABLES `connection` WRITE;
 /*!40000 ALTER TABLE `connection` DISABLE KEYS */;
-INSERT INTO `connection` VALUES (1,'0DW8s4ZUHveDwLkK3u0qSiKIMZ53','Boeing Inc.','Aeronautics enterprise.','2024-05-06 17:16:10','2024-05-07 00:19:20',1);
+INSERT INTO `connection` VALUES (1,'0DW8s4ZUHveDwLkK3u0qSiKIMZ53','7d76a01c-674f-431b-94ed-2d9a936ff3e3','Boeing Inc.','Aeronautics enterprise.','2024-05-06 17:16:10','2024-05-07 00:19:20',1);
 /*!40000 ALTER TABLE `connection` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -442,7 +460,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`34.27.208.49` PROCEDURE `get_alert_by_identifier`(IN id BIGINT UNSIGNED)
 BEGIN
-    SELECT connection_identifier, insight_identifier, training_identifier, date_registered, is_solved, date_training_completed FROM alert WHERE identifier = id;
+    SELECT connection_identifier, insight_identifier, training_identifier, intervene_contact, intervene_agent, original_routing_profile, destination_routing_profile, transfered_agent, date_registered, is_solved, date_training_completed FROM alert WHERE identifier = id;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -461,7 +479,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`34.27.208.49` PROCEDURE `get_alert_with_training_by_identifier`(IN id BIGINT UNSIGNED)
 BEGIN
-SELECT training.identifier, training.denomination, alert.identifier as "alert.identifier", alert.is_solved AS "alert.is_solved", alert.date_registered AS "alert.date_registered"
+SELECT training.identifier, training.denomination, alert.identifier as "alert.identifier", intervene_contact, intervene_agent, original_routing_profile, destination_routing_profile, transfered_agent, alert.is_solved AS "alert.is_solved", alert.date_registered AS "alert.date_registered"
 FROM training LEFT JOIN alert ON alert.training_identifier = training.identifier WHERE alert.identifier = id;
 END ;;
 DELIMITER ;
@@ -595,7 +613,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`34.27.208.49` PROCEDURE `get_connection_by_identifier`(IN id INT UNSIGNED)
 BEGIN
-    SELECT denomination, description, date_joined FROM connection WHERE identifier = id;
+    SELECT uid, supervisor, denomination, description, date_joined FROM connection WHERE identifier = id;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -670,9 +688,9 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`34.27.208.49` PROCEDURE `insert_alert`(IN connection_identifier_value INT UNSIGNED, IN insight_identifier_value SMALLINT UNSIGNED, IN training_identifier_value SMALLINT UNSIGNED, IN resource_value VARCHAR(200))
+CREATE DEFINER=`root`@`34.27.208.49` PROCEDURE `insert_alert`(IN connection_identifier_value INT UNSIGNED, IN insight_identifier_value SMALLINT UNSIGNED, IN training_identifier_value SMALLINT UNSIGNED, IN intervene_contact_value VARCHAR(200), IN intervene_agent_value VARCHAR(200), IN original_routing_profile_value VARCHAR(200), IN destination_routing_profile_value VARCHAR(200), IN transfered_agent_value VARCHAR(200), IN resource_value VARCHAR(200))
 BEGIN
-INSERT INTO alert(connection_identifier, insight_identifier, training_identifier, resource) VALUE (connection_identifier_value, insight_identifier_value, training_identifier_value, resource_value);
+INSERT INTO alert(connection_identifier, insight_identifier, training_identifier, intervene_contact, intervene_agent, original_routing_profile, destination_routing_profile, transfered_agent, resource) VALUE (connection_identifier_value, insight_identifier_value, training_identifier_value, intervene_contact_value, intervene_agent_value, original_routing_profile_value, destination_routing_profile_value, transfered_agent_value, resource_value);
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -708,9 +726,9 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`34.27.208.49` PROCEDURE `insert_connection`(IN uid_value VARCHAR(200), IN denomination_value VARCHAR(100), IN description_value TINYTEXT)
+CREATE DEFINER=`root`@`34.27.208.49` PROCEDURE `insert_connection`(IN uid_value VARCHAR(200), IN supervisor_value VARCHAR(200), IN denomination_value VARCHAR(100), IN description_value TINYTEXT)
 BEGIN
-INSERT INTO connection(uid, denomination, description) VALUE (uid_value, denomination_value, description_value);
+INSERT INTO connection(uid, supervisor, denomination, description) VALUE (uid_value, supervisor_value, denomination_value, description_value);
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -769,7 +787,7 @@ DELIMITER ;
 /*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`34.27.208.49` SQL SECURITY DEFINER */
-/*!50001 VIEW `all_alerts` AS select `alert`.`identifier` AS `identifier`,`alert`.`connection_identifier` AS `connection_identifier`,`alert`.`insight_identifier` AS `insight_identifier`,`alert`.`training_identifier` AS `training_identifier`,`alert`.`resource` AS `resource`,`alert`.`date_registered` AS `date_registered`,`alert`.`date_updated` AS `date_updated`,`alert`.`is_solved` AS `is_solved`,`alert`.`date_training_completed` AS `date_training_completed`,`alert`.`has_training` AS `has_training`,`alert`.`is_training_completed` AS `is_training_completed` from `alert` */;
+/*!50001 VIEW `all_alerts` AS select `alert`.`identifier` AS `identifier`,`alert`.`connection_identifier` AS `connection_identifier`,`alert`.`insight_identifier` AS `insight_identifier`,`alert`.`training_identifier` AS `training_identifier`,`alert`.`intervene_contact` AS `intervene_contact`, `alert`.`intervene_agent` AS `intervene_agent`, `alert`.`original_routing_profile` AS `original_routing_profile`, `alert`.`destination_routing_profile` AS `destination_routing_profile`, `alert`.`transfered_agent` AS `transfered_agent`, `alert`.`resource` AS `resource`,`alert`.`date_registered` AS `date_registered`,`alert`.`date_updated` AS `date_updated`,`alert`.`is_solved` AS `is_solved`,`alert`.`date_training_completed` AS `date_training_completed`,`alert`.`has_training` AS `has_training`,`alert`.`is_training_completed` AS `is_training_completed` from `alert` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -787,7 +805,7 @@ DELIMITER ;
 /*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`34.27.208.49` SQL SECURITY DEFINER */
-/*!50001 VIEW `all_alerts_with_training` AS select `training`.`identifier` AS `identifier`,`training`.`denomination` AS `denomination`,`alert`.`identifier` AS `alert.identifier`,`alert`.`is_solved` AS `alert.is_solved`,`alert`.`date_registered` AS `alert.date_registered` from (`training` left join `alert` on((`alert`.`training_identifier` = `training`.`identifier`))) */;
+/*!50001 VIEW `all_alerts_with_training` AS select `training`.`identifier` AS `identifier`,`training`.`denomination` AS `denomination`,`alert`.`identifier` AS `alert.identifier`,`alert`.`intervene_contact` AS `intervene_contact`, `alert`.`intervene_agent` AS `intervene_agent`, `alert`.`original_routing_profile` AS `original_routing_profile`, `alert`.`destination_routing_profile` AS `destination_routing_profile`, `alert`.`transfered_agent` AS `transfered_agent`,`alert`.`is_solved` AS `alert.is_solved`,`alert`.`date_registered` AS `alert.date_registered` from (`training` left join `alert` on((`alert`.`training_identifier` = `training`.`identifier`))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -823,7 +841,7 @@ DELIMITER ;
 /*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`34.27.208.49` SQL SECURITY DEFINER */
-/*!50001 VIEW `all_connections` AS select `connection`.`identifier` AS `identifier`,`connection`.`uid` AS `uid`,`connection`.`denomination` AS `denomination`,`connection`.`description` AS `description`,`connection`.`date_joined` AS `date_joined`,`connection`.`date_updated` AS `date_updated`,`connection`.`is_active` AS `is_active` from `connection` */;
+/*!50001 VIEW `all_connections` AS select `connection`.`identifier` AS `identifier`,`connection`.`uid` AS `uid`,`connection`.`supervisor` AS `supervisor`,`connection`.`denomination` AS `denomination`,`connection`.`description` AS `description`,`connection`.`date_joined` AS `date_joined`,`connection`.`date_updated` AS `date_updated`,`connection`.`is_active` AS `is_active` from `connection` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;

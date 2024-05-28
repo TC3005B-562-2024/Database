@@ -20,6 +20,7 @@ USE `aci` ;
 CREATE TABLE IF NOT EXISTS `aci`.`connection` (
   `identifier` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `uid` VARCHAR(200) NOT NULL,
+  `supervisor` VARCHAR(200) NOT NULL,
   `denomination` VARCHAR(100) NOT NULL,
   `description` TINYTEXT NULL,
   `date_joined` DATETIME NOT NULL DEFAULT NOW(),
@@ -29,6 +30,7 @@ CREATE TABLE IF NOT EXISTS `aci`.`connection` (
   UNIQUE INDEX `identifier_UNIQUE` (`identifier` ASC) VISIBLE,
   UNIQUE INDEX `uid_UNIQUE` (`uid` ASC) VISIBLE,
   UNIQUE INDEX `denomination_UNIQUE` (`denomination` ASC) INVISIBLE,
+  INDEX `supervisor_INDEX` (`supervisor` ASC) INVISIBLE,
   INDEX `date_updated_INDEX` (`date_updated` ASC) INVISIBLE,
   INDEX `is_active_INDEX` (`is_active` ASC) VISIBLE)
 ENGINE = InnoDB;
@@ -105,6 +107,11 @@ CREATE TABLE IF NOT EXISTS `aci`.`alert` (
   `connection_identifier` INT UNSIGNED NOT NULL,
   `insight_identifier` SMALLINT UNSIGNED NOT NULL,
   `training_identifier` SMALLINT UNSIGNED NULL,
+  `intervene_contact` VARCHAR(200) NULL,
+  `intervene_agent` VARCHAR(200) NULL,
+  `original_routing_profile` VARCHAR(200) NULL,
+  `destination_routing_profile` VARCHAR(200) NULL,
+  `transfered_agent` VARCHAR(200) NULL,
   `resource` VARCHAR(200) NOT NULL,
   `date_registered` DATETIME NOT NULL DEFAULT NOW(),
   `date_updated` DATETIME NOT NULL DEFAULT NOW(),
