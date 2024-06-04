@@ -247,9 +247,9 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE insert_alert(IN connection_identifier_value INT UNSIGNED, IN insight_identifier_value SMALLINT UNSIGNED, IN training_identifier_value SMALLINT UNSIGNED, IN intervene_contact_value VARCHAR(200), IN intervene_agent_value VARCHAR(200), IN original_routing_profile_value VARCHAR(200), IN destination_routing_profile_value VARCHAR(200), IN transfered_agent VARCHAR(200), IN resource_value VARCHAR(200))
+CREATE PROCEDURE insert_alert(IN connection_identifier_value INT UNSIGNED, IN insight_identifier_value SMALLINT UNSIGNED, IN training_identifier_value SMALLINT UNSIGNED, IN intervene_contact_value VARCHAR(200), IN intervene_agent_value VARCHAR(200), IN original_routing_profile_value VARCHAR(200), IN destination_routing_profile_value VARCHAR(200), IN transfered_agent VARCHAR(200), IN resource_name_value VARCHAR(200), IN resource_value VARCHAR(200))
 BEGIN
-INSERT INTO alert(connection_identifier, insight_identifier, training_identifier, intervene_contact, intervene_agent, original_routing_profile, destination_routing_profile, transfered_agent, resource) VALUE (connection_identifier_value, insight_identifier_value, training_identifier_value, intervene_contact_value, intervene_agent_value, original_routing_profile_value, destination_routing_profile_value, transfered_agent_value, resource_value);
+INSERT INTO alert(connection_identifier, insight_identifier, training_identifier, intervene_contact, intervene_agent, original_routing_profile, destination_routing_profile, transfered_agent, resource_name, resource) VALUE (connection_identifier_value, insight_identifier_value, training_identifier_value, intervene_contact_value, intervene_agent_value, original_routing_profile_value, destination_routing_profile_value, transfered_agent_value, resource_name_value, resource_value);
 END //
 
 DELIMITER ;

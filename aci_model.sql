@@ -112,6 +112,7 @@ CREATE TABLE IF NOT EXISTS `aci`.`alert` (
   `original_routing_profile` VARCHAR(200) NULL,
   `destination_routing_profile` VARCHAR(200) NULL,
   `transfered_agent` VARCHAR(200) NULL,
+  `resource_name` VARCHAR(200) NULL,
   `resource` VARCHAR(200) NOT NULL,
   `date_registered` DATETIME NOT NULL DEFAULT NOW(),
   `date_updated` DATETIME NOT NULL DEFAULT NOW(),
